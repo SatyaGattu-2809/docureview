@@ -5,6 +5,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -12,8 +13,42 @@ jobs:
           python-version: '3.12'
           cache: pip
           cache-dependency-path: requirements-dev.lock
+      - run: sudo apt-get update && sudo apt-get install -y tesseract-ocr poppler-utils
       - run: python -m pip install -r requirements-dev.lock
       - run: python -m pip install --no-deps -e .
       - run: ruff check .
       - run: ruff format --check .
       - run: pytest -q
+      - name: Reproduce separate evaluation tracks
+        run: |
+          mkdir -p /tmp/docureview-reports
+          python evaluation/run.py --output /tmp/docureview-reports/headers.json
+          python evaluation/run_rich.py --output /tmp/docureview-reports/rich.json
+          python evaluation/run_ocr.py --output /tmp/docureview-reports/ocr.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: synthetic-evaluation-reports
+          path: /tmp/docureview-reports
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: python -m pip install -r requirements.lock
+      - run: python -m pip install --no-deps -e .
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t docureview:test .

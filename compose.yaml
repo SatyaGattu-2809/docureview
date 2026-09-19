@@ -1,0 +1,38 @@
+services:
+  api:
+    build: .
+    image: docureview:local
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file: .env
+    volumes:
+      - data:/app/data
+    init: true
+    restart: unless-stopped
+    mem_limit: 1536m
+    cpus: 2
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=1777
+  worker:
+    image: docureview:local
+    command: ["python", "-m", "docureview.worker"]
+    env_file: .env
+    volumes:
+      - data:/app/data
+    depends_on: [api]
+    init: true
+    restart: unless-stopped
+    mem_limit: 1536m
+    cpus: 2
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    read_only: true
+    tmpfs:
+      - /tmp:size=256m,mode=1777
+volumes:
+  data:

@@ -1,0 +1,434 @@
+[
+  {
+    "id": "colon-standard",
+    "split": "dev",
+    "vendor": "Atlas Analytics",
+    "template": "colon",
+    "track": "headers",
+    "text": "Invoice Number: INV-101\nVendor: Atlas Analytics\nInvoice Date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Atlas Analytics",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "colon-formatted",
+    "split": "dev",
+    "vendor": "Atlas Analytics",
+    "template": "colon",
+    "track": "headers",
+    "text": "Invoice Number: INV-101\nVendor: Atlas Analytics\nInvoice Date: September 1, 2026\nCurrency: USD\nSubtotal: 1,000.00\nTax: 80.00\nTotal: 1,080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Atlas Analytics",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "colon-ambiguous_date",
+    "split": "dev",
+    "vendor": "Atlas Analytics",
+    "template": "colon",
+    "track": "headers",
+    "text": "Invoice Number: INV-101\nVendor: Atlas Analytics\nInvoice Date: 09/01/2026\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Atlas Analytics",
+      "invoice_date": null,
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "colon-missing_tax",
+    "split": "dev",
+    "vendor": "Atlas Analytics",
+    "template": "colon",
+    "track": "headers",
+    "text": "Invoice Number: INV-101\nVendor: Atlas Analytics\nInvoice Date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTotal: 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Atlas Analytics",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": null,
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "colon-conflicting_total",
+    "split": "dev",
+    "vendor": "Atlas Analytics",
+    "template": "colon",
+    "track": "headers",
+    "text": "Invoice Number: INV-101\nVendor: Atlas Analytics\nInvoice Date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1080.00\nTotal: 1200.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Atlas Analytics",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": null
+    },
+    "must_review": true
+  },
+  {
+    "id": "colon-bad_arithmetic",
+    "split": "dev",
+    "vendor": "Atlas Analytics",
+    "template": "colon",
+    "track": "headers",
+    "text": "Invoice Number: INV-101\nVendor: Atlas Analytics\nInvoice Date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1090.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Atlas Analytics",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1090.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "pipe-standard",
+    "split": "dev",
+    "vendor": "Birch Supply",
+    "template": "pipe",
+    "track": "headers",
+    "text": "Invoice Number | INV-101\nVendor | Birch Supply\nInvoice Date | 2026-09-01\nCurrency | USD\nSubtotal | 1000.00\nTax | 80.00\nTotal | 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Birch Supply",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "pipe-formatted",
+    "split": "dev",
+    "vendor": "Birch Supply",
+    "template": "pipe",
+    "track": "headers",
+    "text": "Invoice Number | INV-101\nVendor | Birch Supply\nInvoice Date | September 1, 2026\nCurrency | USD\nSubtotal | 1,000.00\nTax | 80.00\nTotal | 1,080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Birch Supply",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "pipe-ambiguous_date",
+    "split": "dev",
+    "vendor": "Birch Supply",
+    "template": "pipe",
+    "track": "headers",
+    "text": "Invoice Number | INV-101\nVendor | Birch Supply\nInvoice Date | 09/01/2026\nCurrency | USD\nSubtotal | 1000.00\nTax | 80.00\nTotal | 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Birch Supply",
+      "invoice_date": null,
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "pipe-missing_tax",
+    "split": "dev",
+    "vendor": "Birch Supply",
+    "template": "pipe",
+    "track": "headers",
+    "text": "Invoice Number | INV-101\nVendor | Birch Supply\nInvoice Date | 2026-09-01\nCurrency | USD\nSubtotal | 1000.00\nTotal | 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Birch Supply",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": null,
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "pipe-conflicting_total",
+    "split": "dev",
+    "vendor": "Birch Supply",
+    "template": "pipe",
+    "track": "headers",
+    "text": "Invoice Number | INV-101\nVendor | Birch Supply\nInvoice Date | 2026-09-01\nCurrency | USD\nSubtotal | 1000.00\nTax | 80.00\nTotal | 1080.00\nTotal | 1200.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Birch Supply",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": null
+    },
+    "must_review": true
+  },
+  {
+    "id": "pipe-bad_arithmetic",
+    "split": "dev",
+    "vendor": "Birch Supply",
+    "template": "pipe",
+    "track": "headers",
+    "text": "Invoice Number | INV-101\nVendor | Birch Supply\nInvoice Date | 2026-09-01\nCurrency | USD\nSubtotal | 1000.00\nTax | 80.00\nTotal | 1090.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Birch Supply",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1090.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "equals-standard",
+    "split": "holdout",
+    "vendor": "Cedar Labs",
+    "template": "equals",
+    "track": "headers",
+    "text": "Invoice Number = INV-101\nVendor = Cedar Labs\nInvoice Date = 2026-09-01\nCurrency = USD\nSubtotal = 1000.00\nTax = 80.00\nTotal = 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Cedar Labs",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "equals-formatted",
+    "split": "holdout",
+    "vendor": "Cedar Labs",
+    "template": "equals",
+    "track": "headers",
+    "text": "Invoice Number = INV-101\nVendor = Cedar Labs\nInvoice Date = September 1, 2026\nCurrency = USD\nSubtotal = 1,000.00\nTax = 80.00\nTotal = 1,080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Cedar Labs",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "equals-ambiguous_date",
+    "split": "holdout",
+    "vendor": "Cedar Labs",
+    "template": "equals",
+    "track": "headers",
+    "text": "Invoice Number = INV-101\nVendor = Cedar Labs\nInvoice Date = 09/01/2026\nCurrency = USD\nSubtotal = 1000.00\nTax = 80.00\nTotal = 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Cedar Labs",
+      "invoice_date": null,
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "equals-missing_tax",
+    "split": "holdout",
+    "vendor": "Cedar Labs",
+    "template": "equals",
+    "track": "headers",
+    "text": "Invoice Number = INV-101\nVendor = Cedar Labs\nInvoice Date = 2026-09-01\nCurrency = USD\nSubtotal = 1000.00\nTotal = 1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Cedar Labs",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": null,
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "equals-conflicting_total",
+    "split": "holdout",
+    "vendor": "Cedar Labs",
+    "template": "equals",
+    "track": "headers",
+    "text": "Invoice Number = INV-101\nVendor = Cedar Labs\nInvoice Date = 2026-09-01\nCurrency = USD\nSubtotal = 1000.00\nTax = 80.00\nTotal = 1080.00\nTotal = 1200.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Cedar Labs",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": null
+    },
+    "must_review": true
+  },
+  {
+    "id": "equals-bad_arithmetic",
+    "split": "holdout",
+    "vendor": "Cedar Labs",
+    "template": "equals",
+    "track": "headers",
+    "text": "Invoice Number = INV-101\nVendor = Cedar Labs\nInvoice Date = 2026-09-01\nCurrency = USD\nSubtotal = 1000.00\nTax = 80.00\nTotal = 1090.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Cedar Labs",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1090.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "multiline-standard",
+    "split": "holdout",
+    "vendor": "Dune Studio",
+    "template": "multiline",
+    "track": "headers",
+    "text": "Invoice Number\nINV-101\nVendor\nDune Studio\nInvoice Date\n2026-09-01\nCurrency\nUSD\nSubtotal\n1000.00\nTax\n80.00\nTotal\n1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Dune Studio",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "multiline-formatted",
+    "split": "holdout",
+    "vendor": "Dune Studio",
+    "template": "multiline",
+    "track": "headers",
+    "text": "Invoice Number\nINV-101\nVendor\nDune Studio\nInvoice Date\nSeptember 1, 2026\nCurrency\nUSD\nSubtotal\n1,000.00\nTax\n80.00\nTotal\n1,080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Dune Studio",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": false
+  },
+  {
+    "id": "multiline-ambiguous_date",
+    "split": "holdout",
+    "vendor": "Dune Studio",
+    "template": "multiline",
+    "track": "headers",
+    "text": "Invoice Number\nINV-101\nVendor\nDune Studio\nInvoice Date\n09/01/2026\nCurrency\nUSD\nSubtotal\n1000.00\nTax\n80.00\nTotal\n1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Dune Studio",
+      "invoice_date": null,
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "multiline-missing_tax",
+    "split": "holdout",
+    "vendor": "Dune Studio",
+    "template": "multiline",
+    "track": "headers",
+    "text": "Invoice Number\nINV-101\nVendor\nDune Studio\nInvoice Date\n2026-09-01\nCurrency\nUSD\nSubtotal\n1000.00\nTotal\n1080.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Dune Studio",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": null,
+      "total": "1080.00"
+    },
+    "must_review": true
+  },
+  {
+    "id": "multiline-conflicting_total",
+    "split": "holdout",
+    "vendor": "Dune Studio",
+    "template": "multiline",
+    "track": "headers",
+    "text": "Invoice Number\nINV-101\nVendor\nDune Studio\nInvoice Date\n2026-09-01\nCurrency\nUSD\nSubtotal\n1000.00\nTax\n80.00\nTotal\n1080.00\nTotal\n1200.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Dune Studio",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": null
+    },
+    "must_review": true
+  },
+  {
+    "id": "multiline-bad_arithmetic",
+    "split": "holdout",
+    "vendor": "Dune Studio",
+    "template": "multiline",
+    "track": "headers",
+    "text": "Invoice Number\nINV-101\nVendor\nDune Studio\nInvoice Date\n2026-09-01\nCurrency\nUSD\nSubtotal\n1000.00\nTax\n80.00\nTotal\n1090.00\n",
+    "expected": {
+      "invoice_number": "INV-101",
+      "vendor": "Dune Studio",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1090.00"
+    },
+    "must_review": true
+  }
+]

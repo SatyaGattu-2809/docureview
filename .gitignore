@@ -11,3 +11,7 @@ data/
 build/
 dist/
 .coverage
+node_modules/
+identities.json
+playwright-report/
+test-results/

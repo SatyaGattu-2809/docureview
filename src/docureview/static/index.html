@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DocuReview · Invoice review</title><link rel="stylesheet" href="/assets/style.css"></head>
+<body>
+<header><div><span class="eyebrow">DOCUMENT OPERATIONS</span><h1>DocuReview</h1></div>
+<p>Verify the source. Approve with confidence.</p></header>
+<main>
+<section class="connection"><form id="connect"><label for="key">Your API key</label>
+<input id="key" type="password" autocomplete="off" required placeholder="Reviewer or uploader credential">
+<button>Connect</button><button id="disconnect" type="button">Disconnect</button></form>
+<p id="identity">Credentials stay in this tab’s memory. Automatic acceptance is disabled.</p></section>
+<p id="message" role="status" aria-live="polite"></p>
+<section class="toolbar"><form id="upload"><label for="file">Upload an invoice</label>
+<input id="file" type="file" accept=".txt,.pdf,.png,.jpg,.jpeg" required>
+<button>Upload &amp; process</button></form><button id="refresh">Refresh queue</button></section>
+<p class="hint">Processing uses the background worker. Originals and extracted data expire after the configured retention period.</p>
+<div class="workspace"><aside><h2>Pending review</h2><div id="queue"></div>
+<button id="more" hidden>Load more</button></aside>
+<section id="detail"><div class="empty"><h2>Ready for your first review</h2>
+<p>Connect, upload an invoice, then select it from the queue.</p></div></section></div>
+</main><script src="/assets/review.js" defer></script></body></html>

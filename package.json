@@ -1,0 +1,6 @@
+{
+  "name": "docureview-browser-tests",
+  "private": true,
+  "scripts": {"test:browser": "node scripts/browser-smoke.cjs"},
+  "devDependencies": {"playwright": "1.62.1"}
+}
