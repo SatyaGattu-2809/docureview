@@ -1,0 +1,7 @@
+Invoice number: INV-2026-001
+Vendor: Acme Analytics LLC
+Invoice date: 2026-09-01
+Currency: USD
+Subtotal: 1000.00
+Tax: 80.00
+Total: 1080.00
