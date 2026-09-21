@@ -112,3 +112,58 @@ false acceptance, reviewer correction rates, p50/p95 latency, and inference reso
 Pin model digests and prompt versions. Add a regression gate before model/prompt upgrades;
 monitor each slice after release. Reviewed corrections require a separate labeling and
 consent process before being reused as training or evaluation data.
+
+## Layout and vendor breakdowns
+
+Version 2 header reports add `slices.template` and `slices.vendor`, keeping development
+and holdout results separate within each slice. Every slice includes its document count,
+per-field and full-invoice accuracy, provider failures, and simulated acceptance errors.
+`present_field_accuracy` scores only fields whose gold value is non-null. This complements
+all-field accuracy: a parser returning null for everything can match missing labels without
+extracting any of the information that is actually present.
+
+The frozen `evaluation/reports/layout-demo.json` records the current deterministic parser:
+
+| Layout | Split | Documents | All-field accuracy | Present-field accuracy | Full-invoice accuracy |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Colon | Development | 6 | 100% | 100% | 100% |
+| Pipe | Development | 6 | 7.14% | 0% | 0% |
+| Equals | Holdout | 6 | 7.14% | 0% | 0% |
+| Multiline | Holdout | 6 | 7.14% | 0% | 0% |
+
+Each vendor currently has exactly one layout, so this corpus cannot distinguish vendor
+effects from layout effects. These are text-layout fixtures, not a benchmark of PDF reading
+order or visually complex invoices. OCR remains a separate track. The perfect colon extraction
+score includes correctly extracted invoices with invalid arithmetic that still need review.
+
+Reports also include p50/p95 extraction-plus-assessment latency, using nearest-rank percentiles
+and including failed calls. These timings exclude file parsing, networking to the application,
+and queue wait time. They are informational and vary by machine; CI does not gate on them.
+
+The runner rejects empty datasets, duplicate IDs/documents (ignoring whitespace), incomplete
+labels, invalid splits, and vendor/template overlap before making any model calls. Both splits
+must be present. It accepts a separate labeled corpus through `--dataset path/to/invoices.json`;
+use the committed JSON structure and canonical gold values. Only exception class names are
+recorded for failures, never upstream response bodies or document text.
+
+### Regression check
+
+```bash
+python evaluation/run.py --provider demo \
+  --baseline evaluation/reports/layout-demo.json \
+  --output /tmp/current-layout-report.json
+```
+
+CI runs this comparison as part of the required `test` job. It fails if field, present-field,
+full-invoice, or any individual field accuracy drops overall or in any vendor/layout slice,
+or if provider failures or simulated unsafe acceptances increase. A report is still written
+when scores regress, so the failed run can be inspected. Baseline and output paths must differ.
+Comparisons require matching dataset hashes, provider names, report versions, thresholds,
+groups, and denominators. Historical version 1 reports remain available for the original
+normalization comparison; they are not inputs to this gate.
+
+This gate protects reproducibility, not production readiness: it deliberately preserves the
+weak demo baseline rather than pretending its holdout results are adequate. Review changes
+to the baseline explicitly; do not overwrite it automatically to make CI pass. Live Ollama
+runs can produce the same breakdowns, but this deterministic gate does not certify live-model
+quality or select an acceptance threshold. Automatic acceptance remains disabled.

@@ -22,10 +22,11 @@ jobs:
       - name: Reproduce separate evaluation tracks
         run: |
           mkdir -p /tmp/docureview-reports
-          python evaluation/run.py --output /tmp/docureview-reports/headers.json
+          python evaluation/run.py --baseline evaluation/reports/layout-demo.json --output /tmp/docureview-reports/headers.json
           python evaluation/run_rich.py --output /tmp/docureview-reports/rich.json
           python evaluation/run_ocr.py --output /tmp/docureview-reports/ocr.json
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: synthetic-evaluation-reports
           path: /tmp/docureview-reports
