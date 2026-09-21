@@ -1,0 +1,505 @@
+{
+  "provider": "demo:labels-v1",
+  "dataset_type": "synthetic; not production evidence",
+  "threshold": 0.9,
+  "automatic_acceptance_enabled": false,
+  "metrics": {
+    "headers/dev": {
+      "documents": 12,
+      "field_accuracy": 0.5357142857142857,
+      "full_invoice_accuracy": 0.5,
+      "per_field_accuracy": {
+        "invoice_number": 0.5,
+        "vendor": 0.5,
+        "invoice_date": 0.5833333333333334,
+        "currency": 0.5,
+        "subtotal": 0.5,
+        "tax": 0.5833333333333334,
+        "total": 0.5833333333333334
+      },
+      "policy_review_rate": 1.0,
+      "shadow_review_rate": 0.8333333333333334,
+      "shadow_auto_accepted": 2,
+      "shadow_accepted_error_fraction": 0.0,
+      "provider_failures": 0
+    },
+    "headers/holdout": {
+      "documents": 12,
+      "field_accuracy": 0.07142857142857142,
+      "full_invoice_accuracy": 0.0,
+      "per_field_accuracy": {
+        "invoice_number": 0.0,
+        "vendor": 0.0,
+        "invoice_date": 0.16666666666666666,
+        "currency": 0.0,
+        "subtotal": 0.0,
+        "tax": 0.16666666666666666,
+        "total": 0.16666666666666666
+      },
+      "policy_review_rate": 1.0,
+      "shadow_review_rate": 1.0,
+      "shadow_auto_accepted": 0,
+      "shadow_accepted_error_fraction": null,
+      "provider_failures": 0
+    }
+  },
+  "rows": [
+    {
+      "id": "colon-standard",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": true,
+        "vendor": true,
+        "invoice_date": true,
+        "currency": true,
+        "subtotal": true,
+        "tax": true,
+        "total": true
+      },
+      "correct_fields": 7,
+      "shadow_accepted": true,
+      "incorrect_acceptance": false,
+      "error": null,
+      "latency_seconds": 0.0021
+    },
+    {
+      "id": "colon-formatted",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": true,
+        "vendor": true,
+        "invoice_date": true,
+        "currency": true,
+        "subtotal": true,
+        "tax": true,
+        "total": true
+      },
+      "correct_fields": 7,
+      "shadow_accepted": true,
+      "incorrect_acceptance": false,
+      "error": null,
+      "latency_seconds": 0.0006
+    },
+    {
+      "id": "colon-ambiguous_date",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": true,
+        "vendor": true,
+        "invoice_date": true,
+        "currency": true,
+        "subtotal": true,
+        "tax": true,
+        "total": true
+      },
+      "correct_fields": 7,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0004
+    },
+    {
+      "id": "colon-missing_tax",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": true,
+        "vendor": true,
+        "invoice_date": true,
+        "currency": true,
+        "subtotal": true,
+        "tax": true,
+        "total": true
+      },
+      "correct_fields": 7,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0002
+    },
+    {
+      "id": "colon-conflicting_total",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": true,
+        "vendor": true,
+        "invoice_date": true,
+        "currency": true,
+        "subtotal": true,
+        "tax": true,
+        "total": true
+      },
+      "correct_fields": 7,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0002
+    },
+    {
+      "id": "colon-bad_arithmetic",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": true,
+        "vendor": true,
+        "invoice_date": true,
+        "currency": true,
+        "subtotal": true,
+        "tax": true,
+        "total": true
+      },
+      "correct_fields": 7,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0003
+    },
+    {
+      "id": "pipe-standard",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "pipe-formatted",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "pipe-ambiguous_date",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": true,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "pipe-missing_tax",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": true,
+        "total": false
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "pipe-conflicting_total",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": true
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "pipe-bad_arithmetic",
+      "split": "dev",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "equals-standard",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "equals-formatted",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "equals-ambiguous_date",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": true,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "equals-missing_tax",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": true,
+        "total": false
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "equals-conflicting_total",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": true
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "equals-bad_arithmetic",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0003
+    },
+    {
+      "id": "multiline-standard",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "multiline-formatted",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "multiline-ambiguous_date",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": true,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "multiline-missing_tax",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": true,
+        "total": false
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "multiline-conflicting_total",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": true
+      },
+      "correct_fields": 1,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    },
+    {
+      "id": "multiline-bad_arithmetic",
+      "split": "holdout",
+      "track": "headers",
+      "field_correct": {
+        "invoice_number": false,
+        "vendor": false,
+        "invoice_date": false,
+        "currency": false,
+        "subtotal": false,
+        "tax": false,
+        "total": false
+      },
+      "correct_fields": 0,
+      "shadow_accepted": false,
+      "incorrect_acceptance": true,
+      "error": null,
+      "latency_seconds": 0.0001
+    }
+  ],
+  "dataset_sha256": "c64a8f267c7d35f51d48702deb436e7bf77a3b025588737f0128bf6502cdc342"
+}

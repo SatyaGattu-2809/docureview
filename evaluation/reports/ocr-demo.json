@@ -1,0 +1,20 @@
+{
+  "track": "ocr",
+  "fixtures": "two synthetic printed English images",
+  "provider": "Tesseract + deterministic demo parser; no LLM",
+  "tesseract": "tesseract 5.3.4",
+  "rows": [
+    {
+      "id": "scan_clear",
+      "character_error_rate": 0.0,
+      "field_accuracy": 1.0,
+      "review_required": true
+    },
+    {
+      "id": "scan_skew",
+      "character_error_rate": 0.0,
+      "field_accuracy": 1.0,
+      "review_required": true
+    }
+  ]
+}

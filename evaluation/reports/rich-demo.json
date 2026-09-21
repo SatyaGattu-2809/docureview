@@ -1,0 +1,31 @@
+{
+  "track": "rich invoices",
+  "provider": "deterministic demo parser, no LLM",
+  "scope": "labeled line syntax; schema/validation coverage, not layout generalization",
+  "rows": [
+    {
+      "id": "line_items",
+      "field_accuracy": 1.0,
+      "invoice_validation_correct": true,
+      "review_required": true
+    },
+    {
+      "id": "shipping_discount",
+      "field_accuracy": 1.0,
+      "invoice_validation_correct": true,
+      "review_required": true
+    },
+    {
+      "id": "bad_line_amount",
+      "field_accuracy": 1.0,
+      "invoice_validation_correct": true,
+      "review_required": true
+    },
+    {
+      "id": "bad_subtotal",
+      "field_accuracy": 1.0,
+      "invoice_validation_correct": true,
+      "review_required": true
+    }
+  ]
+}

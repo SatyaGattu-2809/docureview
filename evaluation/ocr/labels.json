@@ -1,0 +1,30 @@
+[
+  {
+    "id": "scan_clear",
+    "path": "ocr/scan_clear.png",
+    "text": "Invoice number: OCR-201\nVendor: Ember Research\nInvoice date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1080.00\n",
+    "expected": {
+      "invoice_number": "OCR-201",
+      "vendor": "Ember Research",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    }
+  },
+  {
+    "id": "scan_skew",
+    "path": "ocr/scan_skew.png",
+    "text": "Invoice number: OCR-201\nVendor: Ember Research\nInvoice date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1080.00\n",
+    "expected": {
+      "invoice_number": "OCR-201",
+      "vendor": "Ember Research",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00"
+    }
+  }
+]

@@ -1,0 +1,76 @@
+[
+  {
+    "id": "line_items",
+    "text": "Invoice number: INV-2026-001\nVendor: Acme Analytics LLC\nInvoice date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1080.00\nItem: Consulting; Quantity: 2; Unit price: 500.00; Amount: 1000.00\n",
+    "expected": {
+      "invoice_number": "INV-2026-001",
+      "vendor": "Acme Analytics LLC",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00",
+      "line_items.0.description": "Consulting",
+      "line_items.0.quantity": "2",
+      "line_items.0.unit_price": "500.00",
+      "line_items.0.amount": "1000.00"
+    },
+    "valid_invoice": true
+  },
+  {
+    "id": "shipping_discount",
+    "text": "Invoice number: INV-2026-001\nVendor: Acme Analytics LLC\nInvoice date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1070.00\nItem: Consulting; Quantity: 2; Unit price: 500.00; Amount: 1000.00\nShipping: 10.00\nDiscount: 20.00\n",
+    "expected": {
+      "invoice_number": "INV-2026-001",
+      "vendor": "Acme Analytics LLC",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1070.00",
+      "line_items.0.description": "Consulting",
+      "line_items.0.quantity": "2",
+      "line_items.0.unit_price": "500.00",
+      "line_items.0.amount": "1000.00",
+      "shipping": "10.00",
+      "discount": "20.00"
+    },
+    "valid_invoice": true
+  },
+  {
+    "id": "bad_line_amount",
+    "text": "Invoice number: INV-2026-001\nVendor: Acme Analytics LLC\nInvoice date: 2026-09-01\nCurrency: USD\nSubtotal: 1000.00\nTax: 80.00\nTotal: 1080.00\nItem: Consulting; Quantity: 3; Unit price: 500.00; Amount: 1000.00\n",
+    "expected": {
+      "invoice_number": "INV-2026-001",
+      "vendor": "Acme Analytics LLC",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "1000.00",
+      "tax": "80.00",
+      "total": "1080.00",
+      "line_items.0.description": "Consulting",
+      "line_items.0.quantity": "3",
+      "line_items.0.unit_price": "500.00",
+      "line_items.0.amount": "1000.00"
+    },
+    "valid_invoice": false
+  },
+  {
+    "id": "bad_subtotal",
+    "text": "Invoice number: INV-2026-001\nVendor: Acme Analytics LLC\nInvoice date: 2026-09-01\nCurrency: USD\nSubtotal: 900.00\nTax: 80.00\nTotal: 980.00\nItem: Consulting; Quantity: 2; Unit price: 500.00; Amount: 1000.00\n",
+    "expected": {
+      "invoice_number": "INV-2026-001",
+      "vendor": "Acme Analytics LLC",
+      "invoice_date": "2026-09-01",
+      "currency": "USD",
+      "subtotal": "900.00",
+      "tax": "80.00",
+      "total": "980.00",
+      "line_items.0.description": "Consulting",
+      "line_items.0.quantity": "2",
+      "line_items.0.unit_price": "500.00",
+      "line_items.0.amount": "1000.00"
+    },
+    "valid_invoice": false
+  }
+]
