@@ -88,6 +88,31 @@ class DemoExtractor:
         return Extraction(**fields, line_items=items)
 
 
+class LabelsExtractor(DemoExtractor):
+    """Explicit labeled text only; observed formats are regression coverage, not AI."""
+
+    name = "labels:v2"
+
+    def extract(self, text: str) -> Extraction:
+        result = super().extract(text)
+        labels = [name.replace("_", " ") for name in [*FIELD_NAMES, "shipping", "discount"]]
+        for name, label in zip([*FIELD_NAMES, "shipping", "discount"], labels, strict=True):
+            pattern = rf"^{label}[ \t]*(?:[:|=][ \t]*|\r?\n[ \t]*)([^\r\n]+)$"
+            matches = list(re.finditer(pattern, text, re.I | re.M))
+            candidate = CandidateField(value=None, confidence=0, evidence=None)
+            if len(matches) == 1:
+                match = matches[0]
+                raw = match.group(1).strip()
+                # A missing multiline value must not consume the next field's label.
+                if raw.casefold() not in labels and not raw.startswith("[PAGE "):
+                    candidate = CandidateField(
+                        value=raw, raw_value=raw, evidence=match.group(0), confidence=0.95
+                    )
+            if name in FIELD_NAMES or matches:
+                setattr(result, name, candidate)
+        return result
+
+
 class OllamaExtractor:
     def __init__(self, client: httpx.Client, url: str, model: str):
         self.client = client

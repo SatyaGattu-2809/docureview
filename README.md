@@ -29,7 +29,6 @@ Requires Python 3.12+. Clone and install:
 ```bash
 git clone https://github.com/SatyaGattu-2809/docureview.git
 cd docureview
-# While this change is under review, switch to feature/evaluation-review.
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-dev.lock
@@ -198,3 +197,10 @@ parser-isolation and migration limitations are in [deployment.md](docs/deploymen
 
 Original files are now retained to support review; do not use sensitive real invoices until
 your storage/access/retention policies are configured. No license has been selected.
+
+## Release verification
+
+See [release acceptance gates](docs/release-readiness.md) for completed functionality and
+remaining deployment evidence. Use `DOCUREVIEW_PROVIDER=labels` for the expanded deterministic
+labeled-text parser. The original `demo` provider and its historical baseline remain unchanged.
+Observed-layout results are regression coverage, not live-model or unseen-layout accuracy.

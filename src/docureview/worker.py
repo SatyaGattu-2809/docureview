@@ -8,12 +8,13 @@ import httpx
 
 from docureview.config import Settings
 from docureview.documents import DocumentError
-from docureview.extraction import DemoExtractor, OllamaExtractor, ProviderError
+from docureview.extraction import DemoExtractor, LabelsExtractor, OllamaExtractor, ProviderError
 from docureview.processing import process
 from docureview.store import Store
 
 
 def run_once(store, settings, extractor):
+    store.heartbeat()
     store.purge()
     job = store.claim()
     if job is None:
@@ -54,6 +55,8 @@ def main():
         extractor = (
             DemoExtractor()
             if settings.provider == "demo"
+            else LabelsExtractor()
+            if settings.provider == "labels"
             else OllamaExtractor(client, settings.ollama_url, settings.ollama_model)
         )
         while True:

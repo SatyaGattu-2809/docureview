@@ -73,6 +73,10 @@ class Store:
                 document_id TEXT, error TEXT, created_at TEXT NOT NULL, expires_at TEXT NOT NULL,
                 UNIQUE(tenant, owner, idempotency_key))""")
             connection.execute("CREATE INDEX IF NOT EXISTS jobs_ready ON jobs(state, available_at)")
+            connection.execute(
+                "CREATE TABLE IF NOT EXISTS worker_health "
+                "(id INTEGER PRIMARY KEY, at TEXT NOT NULL)"
+            )
         self.purge()
 
     @staticmethod
@@ -333,3 +337,36 @@ class Store:
                 WHERE id=? AND lease_token=? AND state='running' """,
                 (state, error, available, state, job["id"], job["lease_token"]),
             )
+
+    def heartbeat(self):
+        with closing(self.connect()) as connection, connection:
+            connection.execute(
+                "INSERT INTO worker_health VALUES (1,?) "
+                "ON CONFLICT(id) DO UPDATE SET at=excluded.at",
+                (now(),),
+            )
+
+    def worker_ready(self):
+        with closing(self.connect()) as connection:
+            row = connection.execute("SELECT at FROM worker_health WHERE id=1").fetchone()
+        return bool(
+            row and datetime.fromisoformat(row["at"]) > datetime.now(UTC) - timedelta(seconds=300)
+        )
+
+    def queue_metrics(self, tenant):
+        with closing(self.connect()) as connection:
+            rows = connection.execute(
+                "SELECT state, count(*) AS n, min(created_at) AS oldest FROM jobs "
+                "WHERE tenant=? AND expires_at>? GROUP BY state",
+                (tenant, now()),
+            ).fetchall()
+        result = {state: 0 for state in ("queued", "running", "succeeded", "failed")}
+        oldest = []
+        for row in rows:
+            result[row["state"]] = row["n"]
+            if row["state"] in ("queued", "running"):
+                oldest.append(datetime.fromisoformat(row["oldest"]))
+        result["oldest_pending_seconds"] = (
+            max(0, (datetime.now(UTC) - min(oldest)).total_seconds()) if oldest else 0
+        )
+        return result

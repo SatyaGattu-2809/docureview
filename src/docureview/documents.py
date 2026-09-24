@@ -39,6 +39,12 @@ def read_pages(data: bytes, media_type: str, settings: Settings) -> list[SourceP
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
             start_new_session=os.name == "posix",
+            # Do not pass API credentials or model secrets to native parsers.
+            env={
+                key: os.environ[key]
+                for key in ("PATH", "LANG", "LC_ALL", "SYSTEMROOT", "TMPDIR", "TESSDATA_PREFIX")
+                if key in os.environ
+            },
         )
         try:
             output, _ = process.communicate(timeout=settings.parse_timeout_seconds)
