@@ -14,7 +14,13 @@ from starlette.concurrency import run_in_threadpool
 
 from docureview.config import Identity, Settings
 from docureview.documents import DocumentError
-from docureview.extraction import DemoExtractor, Extractor, OllamaExtractor, ProviderError
+from docureview.extraction import (
+    DemoExtractor,
+    Extractor,
+    LabelsExtractor,
+    OllamaExtractor,
+    ProviderError,
+)
 from docureview.models import Document, ReviewRequest
 from docureview.processing import process
 from docureview.store import QueueFull, ReviewConflict, Store
@@ -42,6 +48,8 @@ def create_app(settings: Settings | None = None, extractor: Extractor | None = N
             app.state.extractor = extractor or (
                 DemoExtractor()
                 if settings.provider == "demo"
+                else LabelsExtractor()
+                if settings.provider == "labels"
                 else OllamaExtractor(client, settings.ollama_url, settings.ollama_model)
             )
             task = asyncio.create_task(maintenance())
@@ -125,8 +133,17 @@ def create_app(settings: Settings | None = None, extractor: Extractor | None = N
 
         with closing(store.connect()) as connection:
             connection.execute("SELECT count(*) FROM documents").fetchone()
-        # Model readiness is separate from API/database readiness.
+        if settings.require_worker and not store.worker_ready():
+            raise HTTPException(503, "Worker heartbeat missing or stale")
+        # Model inference readiness still needs an authenticated smoke job.
         return {"database": "ready", "provider": settings.provider, "auto_accept": False}
+
+    @app.get("/v1/operations")
+    def operations(principal: Reviewer):
+        return {
+            "worker_ready": store.worker_ready(),
+            "queue": store.queue_metrics(principal.tenant),
+        }
 
     @app.get("/v1/me")
     def me(principal: Principal):
@@ -163,6 +180,8 @@ def create_app(settings: Settings | None = None, extractor: Extractor | None = N
     )
     async def upload(request: Request, principal: Principal):
         """Synchronous compatibility route. Use /v1/jobs for durable processing."""
+        if not settings.sync_upload_enabled:
+            raise HTTPException(409, "Synchronous uploads disabled; use /v1/jobs")
         data, media_type = await read_upload(request)
 
         def execute():

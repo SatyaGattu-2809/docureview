@@ -11,7 +11,7 @@ from pathlib import Path
 
 import httpx
 
-from docureview.extraction import DemoExtractor, OllamaExtractor
+from docureview.extraction import DemoExtractor, LabelsExtractor, OllamaExtractor
 from docureview.models import FIELD_NAMES
 from docureview.validation import assess
 
@@ -134,6 +134,10 @@ def run(cases, extractor):
         "report_version": 2,
         "provider": extractor.name,
         "dataset_type": "synthetic; not production evidence",
+        "split_caveat": (
+            "Existing layouts have been inspected; labels:v2 results are "
+            "regression coverage, not unseen-layout generalization."
+        ),
         "threshold": 0.9,
         "automatic_acceptance_enabled": False,
         "metrics": {key: summarize(group) for key, group in groups.items()},
@@ -183,7 +187,7 @@ def compare_reports(report, baseline):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--provider", choices=["demo", "ollama"], default="demo")
+    parser.add_argument("--provider", choices=["demo", "labels", "ollama"], default="demo")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--dataset", type=Path, default=Path(__file__).with_name("invoices.json"))
     parser.add_argument(
@@ -200,6 +204,8 @@ def main():
         extractor = (
             DemoExtractor()
             if args.provider == "demo"
+            else LabelsExtractor()
+            if args.provider == "labels"
             else OllamaExtractor(
                 client,
                 os.environ.get("OLLAMA_URL", "http://127.0.0.1:11434"),

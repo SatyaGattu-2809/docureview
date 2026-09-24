@@ -19,11 +19,13 @@ class Settings(BaseModel):
     reviewer_name: str = "local-reviewer"
     identities: list[Identity] = Field(default_factory=list)
     database: Path = Path("data/docureview.sqlite3")
-    provider: Literal["demo", "ollama"] = "demo"
+    provider: Literal["demo", "labels", "ollama"] = "demo"
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_model: str = ""
     review_threshold: float = Field(default=0.9, ge=0, le=1)
     auto_accept: bool = False
+    require_worker: bool = False
+    sync_upload_enabled: bool = True
     max_upload_bytes: int = Field(default=5 * 1024 * 1024, gt=0)
     max_text_chars: int = Field(default=12000, gt=0)
     max_pages: int = Field(default=10, gt=0)
@@ -68,6 +70,10 @@ class Settings(BaseModel):
             "ollama_url": "OLLAMA_URL",
             "ollama_model": "OLLAMA_MODEL",
             "review_threshold": "DOCUREVIEW_REVIEW_THRESHOLD",
+            "require_worker": "DOCUREVIEW_REQUIRE_WORKER",
+            "sync_upload_enabled": "DOCUREVIEW_SYNC_UPLOAD_ENABLED",
+            "max_pending_jobs": "DOCUREVIEW_MAX_PENDING_JOBS",
+            "parse_timeout_seconds": "DOCUREVIEW_PARSE_TIMEOUT_SECONDS",
             "auto_accept": "DOCUREVIEW_AUTO_ACCEPT",
             "ocr_enabled": "DOCUREVIEW_OCR_ENABLED",
             "retention_days": "DOCUREVIEW_RETENTION_DAYS",

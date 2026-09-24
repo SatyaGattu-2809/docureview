@@ -100,3 +100,33 @@ healthy. Add model readiness, worker heartbeat, queue-age/error metrics, alertin
 redacted logs and recovery drills when running a service for others. The current SQLite
 audit record is attributable but not append-only or tamper-proof. Use TLS for any remote
 access and keep the default localhost binding until an authenticated gateway is configured.
+
+## Release hardening controls
+
+For a durable-only service, set `DOCUREVIEW_SYNC_UPLOAD_ENABLED=false` and
+`DOCUREVIEW_REQUIRE_WORKER=true` in **both** service environments. `/readyz` then
+returns 503 when no worker iteration has started within five minutes. This budget
+allows the configured parser and model timeouts; it is not proof of successful inference.
+The worker records its heartbeat before each attempt. A crash eventually expires it.
+`GET /v1/operations` requires a reviewer key and exposes only that tenant's queue counts
+and oldest outstanding job age. It never returns invoice text or keys. Monitor pending
+age and failed counts; route alerts to the operator. `DOCUREVIEW_MAX_PENDING_JOBS`
+configures the global queue cap, not a per-tenant quota.
+
+The parser child now receives only a minimal OS/OCR environment. This removes inherited
+API credentials but does not isolate filesystem access or disable networking. A dedicated
+sandbox is still required for hostile public uploads.
+
+### Backup and recovery drill
+
+Run `python -m docureview.backup data/docureview.sqlite3 /secure/path/snapshot.sqlite3`.
+It uses SQLite's online backup API, verifies integrity, creates mode 0600, and refuses to
+overwrite an existing file. Do not copy only the main database while WAL writes are active.
+Encrypt snapshots and expire them under the same data-governance policy as originals.
+
+To restore, stop **both** API and worker, preserve the failed database for investigation,
+and restore the snapshot to a fresh data directory (never leave old WAL/SHM companions).
+Set ownership for UID 10001 in containers. Start against the restored path, run retention
+purge, and verify an authenticated upload/review/delete smoke workflow. Restoring a backup
+can resurrect records deleted since the snapshot: reapply deletion records before access.
+A unit test proves snapshot consistency; a drill on the actual host is still a release gate.
